@@ -1,0 +1,83 @@
+---
+title: "data-by-year-child"
+output: html_document
+---
+```{r, include=FALSE}
+
+numeric_columns <- c("Total Population","Working Age Population","Residents with a Job","All Workers","Net Workers")
+percent_columns <- c('% of Largest City Population')
+
+# Pull Data and Sumamrize for each year in the ACS Year list
+largest_city_by_msa <- NULL
+
+# Calculate the Population for the Largest City in Each MSA
+interim_calc <- partial(pull_api_result, data_year=latest_acs_year, current_variable="DP05_0001E", user_key=api_key)
+largest_city_by_msa <- map(largest_principal_cities,interim_calc)
+
+# Calculate the Principal City measures by City
+current_principal_results <- NULL
+
+# Run for all geographies and store results in a named list
+for (i in seq_along(working_cities)) {
+  interim_calc <- partial(pull_api_result, data_year=latest_acs_year, current_geography=working_cities[[i]], user_key=api_key)
+  current_principal_results[[names(working_cities)[i]]] <- map(principal_city_tables,interim_calc)
+}
+
+# Name the elements in the list for ease of reading
+current_principal_results <- map(current_principal_results,~set_names(.x,names(principal_city_tables)))
+
+# Add Data used in Principal City Calculations
+for (i in seq_along(working_cities)) {
+  current_principal_results[[names(working_cities)[i]]][['net-workers']] <- unlist(Map('-',current_principal_results[[names(working_cities)[i]]][['All Workers 16+']],current_principal_results[[names(working_cities)[i]]][['Resident Workers 16+']]))
+  
+  current_principal_results[[names(working_cities)[i]]][['msa']] <- working_cities_msa[[i]]
+  current_principal_results[[names(working_cities)[i]]][['largest-city-population']] <- largest_city_by_msa[[working_cities_msa[[i]]]]
+  current_principal_results[[names(working_cities)[i]]][['share-of-largest']] <- current_principal_results[[names(working_cities)[i]]][['Total Population']] / current_principal_results[[names(working_cities)[i]]][['largest-city-population']]
+  
+  # Check to See if the City is the Largest City in the MSA, if so it meets criteria A
+  if (current_principal_results[[names(working_cities)[i]]][['largest-city-population']] == current_principal_results[[names(working_cities)[i]]][['Total Population']]) {current_principal_results[[names(working_cities)[i]]][['Principal City Criteria']] <- 'A'
+  
+  # if total people > 250,000 or jobs > 100,000 it meets citeria B
+  } else if (current_principal_results[[names(working_cities)[i]]][['Total Population']] >= 250000 | current_principal_results[[names(working_cities)[i]]][['All Workers 16+']] >= 100000 ) {
+    current_principal_results[[names(working_cities)[i]]][['Principal City Criteria']] <- 'B'
+    
+  # if total people > 50,000 and less than 250,000 and there are more workers than residents with a job it meets citeria C
+  } else if (current_principal_results[[names(working_cities)[i]]][['Total Population']] >= 50000 & current_principal_results[[names(working_cities)[i]]][['Total Population']] < 250000 & current_principal_results[[names(working_cities)[i]]][['net-workers']] > 0 ) {
+    current_principal_results[[names(working_cities)[i]]][['Principal City Criteria']] <- 'C'
+  
+    # if total people > 10,000 and less than 50,000 and it is 1/3 or the largest city and there are more workers than residents with a job it meets citeria D
+  } else if (current_principal_results[[names(working_cities)[i]]][['Total Population']] >= 10000 & current_principal_results[[names(working_cities)[i]]][['Total Population']] < 50000 & current_principal_results[[names(working_cities)[i]]][['share-of-largest']] >= 0.33 & current_principal_results[[names(working_cities)[i]]][['net-workers']] > 0) {
+    current_principal_results[[names(working_cities)[i]]][['Principal City Criteria']] <- 'D'  
+  } else {current_principal_results[[names(working_cities)[i]]][['Principal City Criteria']] <- '-'} 
+}
+
+# Create a Data.Table from the Results List
+wrk_tbl <- NULL
+for (i in seq_along(working_cities)) {
+  interim <- data.table(City=names(working_cities)[i],`Total Population`=current_principal_results[[names(working_cities)[i]]][['Total Population']],`% of Largest City Population`=current_principal_results[[names(working_cities)[i]]][['share-of-largest']],`Working Age Population`=current_principal_results[[names(working_cities)[i]]][['Population 16+']],`Residents with a Job`=current_principal_results[[names(working_cities)[i]]][['Resident Workers 16+']],`All Workers`=current_principal_results[[names(working_cities)[i]]][['All Workers 16+']],`Net Workers`=current_principal_results[[names(working_cities)[i]]][['net-workers']],`Principal City Criteria Met`=current_principal_results[[names(working_cities)[i]]][['Principal City Criteria']])
+  if (is.null(wrk_tbl)) {wrk_tbl <- interim} else {wrk_tbl <- rbind(wrk_tbl,interim)}
+}
+
+clean_tbl <- datatable(wrk_tbl, rownames = FALSE, options = list(pageLength = list_length, columnDefs = list(list(className = 'dt-center', targets =1:7))))
+
+# Format Numeric Columns
+for (working_column in numeric_columns) {
+  clean_tbl <- clean_tbl %>% 
+    formatCurrency(working_column, "", digits = 0) %>%
+    formatStyle(working_column,`text-align` = 'center')
+}
+
+# Format Percentage Columns
+for (working_column in percent_columns) {
+    clean_tbl <- clean_tbl %>% 
+      formatPercentage(working_column,1) %>%
+      formatStyle(working_column,`text-align` = 'center')
+}
+
+```
+
+## ACS-`r latest_acs_year`
+
+```{r, echo=FALSE, results="asis"}
+clean_tbl
+```
