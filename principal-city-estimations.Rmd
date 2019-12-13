@@ -45,7 +45,7 @@ From 2010-2017, there were eleven (11) Principal Cities designated in the two (2
 This document pulls together data from the Census API for all available ACS 5yr data releases since 2011 and compares them to the Principal City criteria to show how the data and designations vary by year.
 
 ```{r inputs_for_analysis, include=FALSE}
-api_key <- '6d9263105b3ca3213e093323b4ece211ab49d4e5'
+api_key <- '<enter api key>'
 ```
 
 ```{r data_setup_and_calcs, include=FALSE}
