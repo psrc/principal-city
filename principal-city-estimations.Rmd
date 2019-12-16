@@ -16,16 +16,11 @@ include_graphics("https://www.psrc.org/sites/default/files/psrclogo_0.png")
 
 Principal Cities are defined by the Office of Budget and Management (OMB) based on American Community Survey (ACS) 5yr data. OMB releases updated lists via Federal Bulletins at various times during the calendar year. Due to the release date of ACS data, the data released in each bulletin typically lags the release year by approximately 2 years. Since 2010, there have been five (5) bulletins releasing updates to the list of Principal Cities in the United States. The bulletins and their respective release dates (along with ACS data used) are:
 
-  * OMB Bulletin No. 18-04 (released 2018-09-14 using ACS 2015 5yr data) - 
-  <https://www.whitehouse.gov/wp-content/uploads/2018/09/Bulletin-18-04.pdf>
-  * OMB Bulletin No. 17-01 (released 2017-08-15 using ACS 2014 5yr data) - 
-  <https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/bulletins/2017/b-17-01.pdf>
-  * OMB Bulletin No. 15-01 (released 2015-07-15 using ACS 2013 5yr data) - 
-  <https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/bulletins/2015/15-01.pdf>
-  * OMB Bulletin No. 13-01 (released 2013-02-28 using Census and ACS 2010 data) - 
-  <https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/bulletins/2013/b13-01.pdf>
-  * OMB Bulletin No. 10-02 (release 2009-12-01 using ACS 2007 data) - 
-  <https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/bulletins/2010/b10-02.pdf>
+  * OMB Bulletin No. 18-04 (released 2018-09-14 using ACS 2015 5yr data) - <https://www.whitehouse.gov/wp-content/uploads/2018/09/Bulletin-18-04.pdf>
+  * OMB Bulletin No. 17-01 (released 2017-08-15 using ACS 2014 5yr data) - <https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/bulletins/2017/b-17-01.pdf>
+  * OMB Bulletin No. 15-01 (released 2015-07-15 using ACS 2013 5yr data) - <https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/bulletins/2015/15-01.pdf>
+  * OMB Bulletin No. 13-01 (released 2013-02-28 using Census and ACS 2010 data) - <https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/bulletins/2013/b13-01.pdf>
+  * OMB Bulletin No. 10-02 (release 2009-12-01 using ACS 2007 data) - <https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/bulletins/2010/b10-02.pdf>
 
 From 2010-2017, there were eleven (11) Principal Cities designated in the two (2) Metropolitan Statistical Areas (MSA) in the four counties that comprise PSRC. In 2018, a 12th Principal City was added to the list for the region. The twelve (12) currently designated Principal Cities in the PSRC region are:
 
