@@ -3,8 +3,6 @@ output:
   html_document:
     theme: cerulean
     toc: false
-    toc_float: false
-    number_sections: false
 ---
 ```{r, echo=FALSE, out.width = '30%', fig.align = "right"}
 library(knitr)
@@ -41,6 +39,7 @@ This document pulls together data from the Census API for all available ACS 5yr 
 
 ```{r inputs_for_analysis, include=FALSE}
 api_key <- '<enter api key>'
+acs_years <- list('2011','2012','2013','2014','2015','2016','2017')
 ```
 
 ```{r data_setup_and_calcs, include=FALSE}
@@ -265,8 +264,6 @@ The tabs below summarize the data by the current 12 designated principal cities 
 ```{r current-cities, echo = FALSE, include = FALSE, results = 'asis'}
 out <- NULL
 
-acs_years <- list('2011','2012','2013','2014','2015','2016','2017')
-
 for (i in acs_years) {
   latest_acs_year <- i
   working_cities <- current_principal_cities
@@ -283,8 +280,6 @@ The tabs below summarize the data for teh remaining incorporated cities in the P
 
 ```{r possible-cities, echo = FALSE, include = FALSE, results = 'asis'}
 out <- NULL
-
-acs_years <- list('2011','2012','2013','2014','2015','2016','2017')
 
 for (i in acs_years) {
   latest_acs_year <- i
