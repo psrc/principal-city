@@ -1,5 +1,5 @@
 ---
-title: "data-by-year-child"
+title: "data-by-year-child-kable"
 output: html_document
 ---
 ```{r, include=FALSE}
@@ -58,25 +58,13 @@ for (i in seq_along(working_cities)) {
   if (is.null(wrk_tbl)) {wrk_tbl <- interim} else {wrk_tbl <- rbind(wrk_tbl,interim)}
 }
 
-clean_tbl <- datatable(wrk_tbl, rownames = FALSE, options = list(pageLength = list_length, columnDefs = list(list(className = 'dt-center', targets =1:7))))
+wrk_tbl$`% of Largest City Population` <- percent(wrk_tbl$`% of Largest City Population`, digits=0)
 
-# Format Numeric Columns
-for (working_column in numeric_columns) {
-  clean_tbl <- clean_tbl %>% 
-    formatCurrency(working_column, "", digits = 0) %>%
-    formatStyle(working_column,`text-align` = 'center')
-}
-
-# Format Percentage Columns
-for (working_column in percent_columns) {
-    clean_tbl <- clean_tbl %>% 
-      formatPercentage(working_column,1) %>%
-      formatStyle(working_column,`text-align` = 'center')
-}
+clean_tbl = kable(wrk_tbl, format="markdown", align = "lccccccc", format.args = list(decimal.mark = ".", big.mark = ","), digits=c(0,-1,0,-1,-1,-1,-1,0))
 
 ```
 
-## ACS-`r latest_acs_year`
+## Principal Cities using ACS Data from `r latest_acs_year`
 
 ```{r, echo=FALSE, results="asis"}
 clean_tbl
